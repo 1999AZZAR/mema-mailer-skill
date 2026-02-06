@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject | default('Mema Intelligence Report') }}</title>
+    <style>
+        /* Base styles for maximum client compatibility */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+            height: 100% !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        img {
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            padding: 32px 40px;
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        .content {
+            padding: 40px;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .footer {
+            padding: 32px 40px;
+            background-color: #f1f5f9;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+        .social-link {
+            color: #2563eb;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            color: #1e293b;
+        }
+        p {
+            margin: 0 0 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f8fafc; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <div class="container">
+                    <!-- Brand Header -->
+                    <div class="header">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tr>
+                                <td>
+                                    <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.5px;">AZZAR</span>
+                                    <span style="color: #60a5fa; font-weight: 400;"> • MEMA AI</span>
+                                </td>
+                                <td align="right" style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8;">
+                                    System Report
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="content">
+                        <h1>{{ title | default('Automated Notification') }}</h1>
+                        <p>Dear {{ name | default('Azzar') }},</p>
+                        <p>{{ message }}</p>
+                        
+                        {% if items %}
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin: 24px 0; border: 1px solid #f1f5f9; border-radius: 6px;">
+                            {% for label, value in items.items() %}
+                            <tr style="border-bottom: 1px solid #f1f5f9;">
+                                <td style="padding: 12px; font-weight: 600; color: #64748b; width: 40%;">{{ label }}</td>
+                                <td style="padding: 12px; font-family: monospace; color: #0f172a;">{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+
+                        {% if action_url %}
+                        <div align="center">
+                            <a href="{{ action_url }}" class="button">{{ action_text | default('View Details') }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Professional Footer -->
+                    <div class="footer">
+                        <p style="margin-bottom: 8px;">&copy; 2026 Azzar Budiyanto. All rights reserved.</p>
+                        <p style="margin-bottom: 16px;">
+                            <a href="https://azzar.netlify.app/porto" class="social-link">Portfolio</a> | 
+                            <a href="https://x.com/siapa_hayosiapa" class="social-link">Twitter/X</a> |
+                            <a href="https://glassgallery.my.id" class="social-link">Glass Gallery</a>
+                        </p>
+                        <p style="font-size: 11px; line-height: 1.4;">
+                            This message was processed and delivered by <strong>Mema AI</strong> via Resend Relay.
+                            <br>
+                            To manage these alerts, contact your system administrator.
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
