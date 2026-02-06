@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; margin: 0; padding: 40px; }
+        .container { max-width: 600px; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin: 0 auto; border: 1px solid #e1e8ed; }
+        .header { text-align: center; border-bottom: 2px solid #3b82f6; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: #1e293b; margin: 0; font-size: 24px; letter-spacing: -0.5px; }
+        .content { color: #475569; line-height: 1.6; font-size: 16px; }
+        .footer { text-align: center; margin-top: 40px; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        .btn { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mema Intelligence</h1>
+        </div>
+        <div class="content">
+            <p>Halo, <strong>{{ name }}</strong>!</p>
+            <p>{{ message }}</p>
+            {% if action_url %}
+            <div style="text-align: center;">
+                <a href="{{ action_url }}" class="btn">{{ action_text | default('Klik di sini') }}</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            Dikirim secara ajaib oleh Mema &bull; glassgallery.my.id
+        </div>
+    </div>
+</body>
+</html>
