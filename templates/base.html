@@ -3,56 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ subject | default('Mema Intelligence Report') }}</title>
+    <title>{{ subject | default('MEMA Intelligence Report') }}</title>
     <style>
-        /* Base styles for maximum client compatibility */
-        body { margin: 0; padding: 0; width: 100% !important; height: 100% !important; background-color: #f8fafc; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #334155; -webkit-font-smoothing: antialiased; }
         table { border-collapse: collapse; }
         img { border: 0; outline: none; text-decoration: none; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .header { padding: 40px 40px 30px; background-color: #0f172a; color: #ffffff; text-align: center; }
-        .content { padding: 40px; color: #334155; line-height: 1.6; }
-        .footer { padding: 32px 40px; background-color: #f1f5f9; color: #64748b; font-size: 12px; text-align: center; border-top: 1px solid #e2e8f0; }
-        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .card-title { margin: 0 0 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; color: #64748b; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .wrapper { width: 100%; padding: 40px 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .header { padding: 36px 40px; background-color: #0f172a; text-align: center; }
+        .brand { font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: -0.3px; margin: 0; }
+        .brand-subtitle { margin-top: 6px; font-size: 13px; color: #94a3b8; }
+        .content { padding: 40px; font-size: 14px; line-height: 1.7; }
+        .card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+        .card-title { margin: 0 0 12px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #64748b; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
         .stat-label { color: #64748b; }
-        .stat-value { font-weight: 500; color: #0f172a; text-align: right; font-family: monospace; }
-        .social-link { color: #2563eb; text-decoration: none; margin: 0 10px; font-weight: 500; }
-        h1 { font-size: 28px; font-weight: 800; margin: 0 0 4px 0; color: #ffffff; letter-spacing: -0.5px; }
-        .subtitle { font-size: 14px; font-weight: 400; color: #94a3b8; text-transform: lowercase; letter-spacing: 0.5px; }
+        .stat-value { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #0f172a; }
+        .footer { padding: 28px 40px; background-color: #f1f5f9; border-top: 1px solid #e2e8f0; text-align: center; font-size: 12px; color: #64748b; }
+        .footer a { color: #2563eb; text-decoration: none; margin: 0 8px; font-weight: 500; }
+        .footer-note { margin-top: 14px; font-size: 11px; line-height: 1.5; opacity: 0.75; }
     </style>
 </head>
 <body>
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f8fafc; padding: 40px 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="wrapper">
         <tr>
             <td align="center">
-                <div class="container">
-                    <!-- Brand Header -->
-                    <div class="header">
-                        <h1>MEMA AI</h1>
-                        <div class="subtitle">azzar's personal assistant</div>
-                    </div>
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="container">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h1 class="brand">MEMA AI</h1>
+                            <div class="brand-subtitle">
+                                Automated Intelligence & System Reporting
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td class="content">
+                            {% block content %}{% endblock %}
+                        </td>
+                    </tr>
 
-                    <!-- Main Content -->
-                    <div class="content">
-                        {% block content %}{% endblock %}
-                    </div>
-
-                    <!-- Professional Footer -->
-                    <div class="footer">
-                        <p style="margin-bottom: 12px; font-weight: 500; color: #334155;">&copy; 2026 Azzar Budiyanto. All rights reserved.</p>
-                        <p style="margin-bottom: 20px;">
-                            <a href="https://azzar.netlify.app/porto" class="social-link">Portfolio</a>
-                            <a href="https://x.com/siapa_hayosiapa" class="social-link">Twitter/X</a>
-                            <a href="https://glassgallery.my.id" class="social-link">Glass Gallery</a>
-                        </p>
-                        <p style="font-size: 11px; line-height: 1.5; opacity: 0.7;">
-                            This automated message was generated by your personal AI assistant.<br>
-                            System status verified at time of sending.
-                        </p>
-                    </div>
-                </div>
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <div style="margin-bottom: 12px;">&copy; 2026 Azzar Budiyanto. All rights reserved.</div>
+                            <div style="margin-bottom: 20px;">
+                                <a href="https://azzar.netlify.app/porto">Portfolio</a> • 
+                                <a href="https://x.com/siapa_hayosiapa">Twitter/X</a> • 
+                                <a href="https://glassgallery.my.id">Glass Gallery</a>
+                            </div>
+                            <div class="footer-note">
+                                This message was processed and delivered by <strong>Mema AI</strong>.
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

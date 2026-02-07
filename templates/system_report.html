@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">System Health Dashboard</h2>
-<p style="font-size: 14px; color: #64748b; margin: 0 0 24px 0;">Generated at {{ now }}</p>
+<!-- System Status -->
+<div style="margin-bottom: 24px;">
+    <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: #1e293b;">System Health Dashboard</h2>
+    <p style="font-size: 13px; color: #64748b; margin: 0;">Generated at {{ now }}</p>
+</div>
 
 <!-- OCI Section -->
 <div class="card" style="border-left: 4px solid #3b82f6;">
