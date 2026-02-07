@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    {% if title %}
+    <h2 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 16px 0;">{{ title }}</h2>
+    {% endif %}
+    
+    {% for p in paragraphs %}
+    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">{{ p | safe }}</p>
+    {% endfor %}
+
+    {% if action %}
+    <div style="margin-top: 28px; margin-bottom: 8px;">
+        <a href="{{ action.url }}" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 13px;">
+            {{ action.text }} &rarr;
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
