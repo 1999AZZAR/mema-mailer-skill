@@ -1,7 +1,9 @@
-# SKILL: mema-mailer
+---
+name: mema-mailer
+description: Professional email delivery system using msmtp and Python-based HTML templating (Jinja2). Use when user asks to "send email", "notify me", "send report".
+---
 
-## Description
-Professional email delivery system using msmtp and Python-based HTML templating (Jinja2). Use when user asks to "send email", "notify me", "send report".
+# Mema Mailer
 
 ## Setup
 1.  Copy `.env.example` to `.env`.
