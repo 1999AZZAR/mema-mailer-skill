@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if header_image %}
+<div style="text-align: center; margin-bottom: 24px;">
+    <img src="{{ header_image }}" alt="{{ header_alt | default('Newsletter Header') }}" style="max-width: 100%; height: auto; border-radius: 6px;" />
+</div>
+{% endif %}
+
+<div class="card">
+    <h2 style="font-size: 22px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; text-align: center;">
+        {{ newsletter_title | default('Newsletter') }}
+    </h2>
+    {% if newsletter_subtitle %}
+    <p style="color: #64748b; margin: 0 0 24px 0; text-align: center; font-size: 14px;">
+        {{ newsletter_subtitle }}
+    </p>
+    {% endif %}
+    
+    {% if intro %}
+    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6; text-align: center;">
+        {{ intro }}
+    </p>
+    {% endif %}
+</div>
+
+{% if articles %}
+{% for article in articles %}
+<div class="card">
+    {% if article.title %}
+    <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 8px 0;">
+        {{ article.title }}
+    </h3>
+    {% endif %}
+    
+    {% if article.image %}
+    <div style="margin: 16px 0;">
+        <img src="{{ article.image }}" alt="{{ article.image_alt | default(article.title) }}" style="max-width: 100%; height: auto; border-radius: 4px;" />
+    </div>
+    {% endif %}
+    
+    {% if article.excerpt %}
+    <p style="color: #475569; margin: 0 0 12px 0; line-height: 1.6;">
+        {{ article.excerpt }}
+    </p>
+    {% endif %}
+    
+    {% if article.read_more_url %}
+    <div style="margin-top: 16px;">
+        <a href="{{ article.read_more_url }}" class="btn btn-outline btn-sm">
+            {{ article.read_more_text | default('Read More') }} →
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if featured_items %}
+<div class="card">
+    <div class="card-title">Featured</div>
+    <div class="row">
+        {% for item in featured_items %}
+        <div class="col col-6">
+            <div style="padding: 12px; background-color: #f8fafc; border-radius: 4px; margin-bottom: 12px;">
+                {% if item.title %}
+                <strong style="color: #1e293b; font-size: 14px;">{{ item.title }}</strong>
+                {% endif %}
+                {% if item.description %}
+                <p style="color: #64748b; margin: 4px 0 0 0; font-size: 12px;">{{ item.description }}</p>
+                {% endif %}
+                {% if item.url %}
+                <a href="{{ item.url }}" style="color: #2563eb; font-size: 12px; text-decoration: none;">Learn more →</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if quote %}
+<div class="blockquote">
+    {{ quote.text }}
+    {% if quote.author %}
+    <div class="blockquote-footer">— {{ quote.author }}</div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if cta_url %}
+<div style="text-align: center; margin-top: 32px;">
+    <a href="{{ cta_url }}" class="btn btn-primary btn-lg">
+        {{ cta_text | default('View All Updates') }}
+    </a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 32px;">
+    <h2 style="font-size: 24px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0;">
+        Welcome, {{ name }}!
+    </h2>
+    <p style="color: #64748b; margin: 0 0 24px 0; font-size: 14px;">
+        {{ subtitle | default('We\'re excited to have you on board.') }}
+    </p>
+    
+    {% if welcome_message %}
+    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6;">
+        {{ welcome_message }}
+    </p>
+    {% endif %}
+</div>
+
+{% if features %}
+<div class="card">
+    <div class="card-title">Getting Started</div>
+    {% for feature in features %}
+    <div class="list-item-icon" style="margin-bottom: 12px;">
+        <strong style="color: #1e293b;">{{ feature.title }}</strong>
+        <p style="color: #64748b; margin: 4px 0 0 0; font-size: 13px;">{{ feature.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if quick_links %}
+<div class="card">
+    <div class="card-title">Quick Links</div>
+    <div style="margin-top: 12px;">
+        {% for link in quick_links %}
+        <a href="{{ link.url }}" class="btn btn-outline" style="margin: 4px 8px 4px 0;">
+            {{ link.text }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary btn-lg">
+        {{ action_text | default('Get Started') }}
+    </a>
+</div>
+{% endif %}
+{% endblock %}

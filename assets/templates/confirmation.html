@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 32px;">
+    {% if status == 'success' %}
+    <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
+    <h2 style="font-size: 22px; font-weight: 700; color: #22c55e; margin: 0 0 8px 0;">
+        {{ success_title | default('Success!') }}
+    </h2>
+    {% elif status == 'error' %}
+    <div style="font-size: 48px; margin-bottom: 16px; color: #ef4444;">✗</div>
+    <h2 style="font-size: 22px; font-weight: 700; color: #ef4444; margin: 0 0 8px 0;">
+        {{ error_title | default('Error') }}
+    </h2>
+    {% else %}
+    <h2 style="font-size: 22px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0;">
+        {{ title | default('Confirmation') }}
+    </h2>
+    {% endif %}
+    
+    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6;">
+        {{ message }}
+    </p>
+</div>
+
+{% if transaction_id %}
+<div class="card">
+    <div class="card-title">Transaction Details</div>
+    <div class="stat-row">
+        <span class="stat-label">Transaction ID</span>
+        <span class="stat-value">{{ transaction_id }}</span>
+    </div>
+    {% if transaction_date %}
+    <div class="stat-row">
+        <span class="stat-label">Date</span>
+        <span class="stat-value">{{ transaction_date }}</span>
+    </div>
+    {% endif %}
+    {% if amount %}
+    <div class="stat-row">
+        <span class="stat-label">Amount</span>
+        <span class="stat-value">{{ amount }}</span>
+    </div>
+    {% endif %}
+    {% if status %}
+    <div class="stat-row">
+        <span class="stat-label">Status</span>
+        <span class="stat-value">
+            <span class="badge badge-{{ 'success' if status == 'success' else 'danger' if status == 'error' else 'info' }}">
+                {{ status | upper }}
+            </span>
+        </span>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if items %}
+<div class="card">
+    <div class="card-title">Items</div>
+    <table class="table">
+        {% if table_headers %}
+        <thead>
+            <tr>
+                {% for header in table_headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody>
+            {% for item in items %}
+            <tr>
+                {% for cell in item %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if next_steps %}
+<div class="card">
+    <div class="card-title">Next Steps</div>
+    {% for step in next_steps %}
+    <div class="list-item-icon" style="margin-bottom: 12px;">
+        {{ step }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('Continue') }}
+    </a>
+    {% if secondary_url %}
+    <a href="{{ secondary_url }}" class="btn btn-outline" style="margin-left: 8px;">
+        {{ secondary_text | default('View Details') }}
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if support_info %}
+<div class="alert alert-info" style="margin-top: 24px;">
+    <strong>Need Help?</strong>
+    <p style="margin: 8px 0 0 0; font-size: 13px;">{{ support_info }}</p>
+</div>
+{% endif %}
+{% endblock %}

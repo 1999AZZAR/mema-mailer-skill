@@ -4,14 +4,20 @@ import argparse
 import json
 import requests
 from jinja2 import Environment, FileSystemLoader
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # --- Config ---
-TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "../templates")
-SENDER_EMAIL = "mema@glassgallery.my.id"
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "../assets/templates")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", "mema@glassgallery.my.id")
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 
 class MemaMailer:
     def __init__(self):
+        if not RESEND_API_KEY:
+            raise ValueError("RESEND_API_KEY not found in environment")
         self.env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
     def send(self, to_emails, subject, template_name, context=None, cc_emails=None, bcc_emails=None):
@@ -43,7 +49,11 @@ class MemaMailer:
             resp_data = response.json()
 
             if response.status_code in [200, 201]:
-                return {"status": "success", "message": f"Email sent via Resend to {to_emails}", "resend_id": resp_data.get("id")}
+                return {
+                    "status": "success", 
+                    "message": f"Email sent to {', '.join(to_emails)}", 
+                    "resend_id": resp_data.get("id")
+                }
             else:
                 return {"status": "error", "message": resp_data}
 

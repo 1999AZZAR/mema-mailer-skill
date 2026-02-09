@@ -1,15 +1,17 @@
 # Email Delivery Policy
 
 ## Provider
-- **Service**: Resend.com
+- **Service**: Resend (API-driven delivery)
 - **Rate Limit**: Max 100 emails/day (Free Tier).
-- **Domain**: Must be verified in Resend dashboard.
+- **Domain**: Verified sender domain required via Resend dashboard.
 
 ## Security
-- **API Key**: `re_***` (Never commit this!)
-- **SPF/DKIM**: Ensure DNS records are valid to avoid spam folder.
+- **API Key**: Managed via `RESEND_API_KEY` in `.env`.
+- **Validation**: Strict input validation for recipient addresses.
+- **Transport**: HTTPS (TLS 1.2+) enforced by Resend API.
 
 ## Templating (Jinja2)
-- All templates extend `base.html`.
-- Use `{{ variable }}` for dynamic content.
-- Use `{% block content %}` for unique body content.
+- Templates stored in `assets/templates`.
+- Dynamic content uses double curly braces `{{ }}`.
+- Logic blocks use `{% %}`.
+

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if report_title %}
+<div style="margin-bottom: 24px;">
+    <h2 style="font-size: 20px; font-weight: 600; margin: 0 0 4px 0; color: #1e293b;">{{ report_title }}</h2>
+    {% if report_subtitle %}
+    <p style="font-size: 13px; color: #64748b; margin: 0;">{{ report_subtitle }}</p>
+    {% endif %}
+    {% if report_date %}
+    <p style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 0;">Generated: {{ report_date }}</p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if summary %}
+<div class="card">
+    <div class="card-title">Summary</div>
+    <p style="color: #475569; margin: 0; line-height: 1.6;">{{ summary }}</p>
+</div>
+{% endif %}
+
+{% if stats %}
+<div class="card">
+    <div class="card-title">Statistics</div>
+    {% for stat in stats %}
+    <div class="stat-row">
+        <span class="stat-label">{{ stat.label }}</span>
+        <span class="stat-value">{{ stat.value }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if data_table %}
+<div class="card">
+    <div class="card-title">{{ table_title | default('Data Overview') }}</div>
+    <table class="table table-striped">
+        {% if table_headers %}
+        <thead>
+            <tr>
+                {% for header in table_headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody>
+            {% for row in data_table %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if progress_data %}
+<div class="card">
+    <div class="card-title">Progress</div>
+    {% for item in progress_data %}
+    <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-size: 13px; color: #64748b;">{{ item.label }}</span>
+            <span style="font-size: 13px; font-weight: 600; color: #0f172a;">{{ item.value }}%</span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar{% if item.value >= 80 %} progress-bar-success{% elif item.value >= 50 %} progress-bar-warning{% else %} progress-bar-danger{% endif %}" style="width: {{ item.value }}%;"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if highlights %}
+<div class="card">
+    <div class="card-title">Highlights</div>
+    {% for highlight in highlights %}
+    <div class="alert alert-{{ highlight.type | default('info') }}" style="margin-bottom: 12px;">
+        <strong>{{ highlight.title }}</strong>
+        <p style="margin: 4px 0 0 0; font-size: 13px;">{{ highlight.message }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('View Full Report') }}
+    </a>
+</div>
+{% endif %}
+{% endblock %}

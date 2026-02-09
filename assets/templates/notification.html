@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if alert_type %}
+<div class="alert alert-{{ alert_type }}">
+    <strong>{{ alert_title | default('Notification') }}</strong>
+    <p style="margin: 8px 0 0 0;">{{ alert_message }}</p>
+</div>
+{% endif %}
+
+<div class="card">
+    {% if title %}
+    <h2 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 16px 0;">{{ title }}</h2>
+    {% endif %}
+    
+    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">
+        {{ message }}
+    </p>
+    
+    {% if details %}
+    <div style="margin: 20px 0;">
+        {% for detail in details %}
+        <div class="list-item" style="margin-bottom: 8px;">
+            {{ detail }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if action_url %}
+    <div style="margin-top: 28px; text-align: center;">
+        <a href="{{ action_url }}" class="btn btn-primary">
+            {{ action_text | default('View Details') }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% if metadata %}
+<div class="card" style="background-color: #f8fafc;">
+    <div class="card-title">Metadata</div>
+    {% for key, value in metadata.items() %}
+    <div class="stat-row">
+        <span class="stat-label">{{ key }}</span>
+        <span class="stat-value">{{ value }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
