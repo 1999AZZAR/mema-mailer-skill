@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block artifact_class %}BASIC{% endblock %}
+{% block theme %}basic{% endblock %}
+
+{% block content %}
+<div style="background:#fafafa; border:1px solid #e5e7eb; border-radius:4px; padding:16px;">
+  <h3 style="font-size:16px; color:#374151; margin-bottom:8px;">{{ title | default('Simple Message') }}</h3>
+  <p style="font-size:14px; color:#4b5563; line-height:1.4;">
+    {{ message | default('This is a minimal email template – no frills, just the info.') }}
+  </p>
+  {% if action_url %}
+    <div style="margin-top:12px; text-align:center;">
+      <a href="{{ action_url }}" style="display:inline-block; background:#6b7280; color:#fff; padding:6px 12px; border-radius:3px; text-decoration:none; font-size:13px;">
+        {{ action_text | default('Open') }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -148,7 +148,7 @@
                                     <!-- RIGHT: ARTIFACT CLASS -->
                                     <td align="right" valign="top">
                                         <div style=" display: inline-block; padding: 6px 10px; border: 1px solid #334155; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.6px; color: #e2e8f0; text-transform: uppercase; ">
-                                            {{ artifact_class | default('SYSTEM ARTIFACT') }}
+                                            {% block artifact_class %}{{ artifact_class | default('SYSTEM ARTIFACT') }}{% endblock %}
                                         </div>
                                     </td>
                                 </tr>

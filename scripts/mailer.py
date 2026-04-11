@@ -12,11 +12,11 @@ load_dotenv()
 # --- Config ---
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "../assets/templates")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL", "mema@glassgallery.my.id")
-RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 
 class MemaMailer:
-    def __init__(self):
-        if not RESEND_API_KEY:
+    def __init__(self, api_key=None):
+        self.api_key = api_key or os.getenv("RESEND_API_KEY")
+        if not self.api_key:
             raise ValueError("RESEND_API_KEY not found in environment")
         self.env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
@@ -29,7 +29,7 @@ class MemaMailer:
             # Send via Resend API
             url = "https://api.resend.com/emails"
             headers = {
-                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json"
             }
             
@@ -77,6 +77,6 @@ if __name__ == "__main__":
     cc_list = [e.strip() for e in args.cc.split(',') if e.strip()] if args.cc else []
     bcc_list = [e.strip() for e in args.bcc.split(',') if e.strip()] if args.bcc else []
 
-    mailer = MemaMailer()
+    mailer = MemaMailer(os.getenv("RESEND_API_KEY"))
     result = mailer.send(to_list, args.subject, args.template, context_data, cc_list, bcc_list)
     print(json.dumps(result, indent=2))
