@@ -29,12 +29,22 @@ python3 scripts/mailer.py \
 
 | Arg | Required | Description |
 |---|---|---|
-| `--to` | Yes | Comma-separated recipient emails |
-| `--subject` | Yes | Email subject line |
+| `--to` | Yes* | Comma-separated recipient emails |
+| `--subject` | Yes* | Email subject line |
 | `--template` | No | Template name without `.html` (default: `default`) |
 | `--context` | No | JSON string of template variables |
+| `--context-file` | No | Path to JSON file with template variables |
 | `--cc` | No | Comma-separated CC emails |
 | `--bcc` | No | Comma-separated BCC emails |
+| `--reply-to` | No | Reply-To address |
+| `--dry-run` | No | Render template only, do not send |
+| `--batch` | No | Comma-separated recipients for individual sends |
+| `--list-templates` | No | List all available templates and exit |
+| `--api-key` | No | Resend API key (overrides env) |
+| `--sender` | No | Sender email (overrides env) |
+| `-v, --verbose` | No | Verbose/debug output |
+
+*Required unless `--batch` or `--list-templates` is used.
 
 ## Template Map
 
