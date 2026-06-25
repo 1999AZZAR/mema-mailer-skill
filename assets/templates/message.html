@@ -1,20 +1,19 @@
 {% extends "base.html" %}
-{% block artifact_class %}DIRECT MESSAGE{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('DIRECT MESSAGE') }}{% endblock %}
 
 {% block content %}
 <div class="card">
     {% if title %}
-    <h2 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 16px 0;">{{ title }}</h2>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin: 0 0 16px 0; letter-spacing: -0.02em;">{{ title }}</h2>
     {% endif %}
-    
+
     {% for p in paragraphs %}
-    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">{{ p | safe }}</p>
+    <p style="color: #2A2520; margin: 0 0 16px 0; line-height: 1.6;">{{ p | safe }}</p>
     {% endfor %}
 
     {% if action %}
     <div style="margin-top: 28px; margin-bottom: 8px;">
-        <a href="{{ action.url }}" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 13px;">
+        <a href="{{ action.url }}" style="display: inline-block; background-color: #9C3D3B; color: #EFE9DC; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 13px; letter-spacing: 0.02em;">
             {{ action.text }} &rarr;
         </a>
     </div>

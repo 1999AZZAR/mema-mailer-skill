@@ -1,19 +1,192 @@
 {% extends "base.html" %}
-{% block artifact_class %}PERSONAL{% endblock %}
-{% block theme %}personal{% endblock %}
+{% block artifact_class %}{{ artifact_class | default('PERSONAL') }}{% endblock %}
 
 {% block content %}
-<div style="background:#fff7f8; border:1px solid #f87171; border-radius:8px; padding:20px;">
-  <h2 style="font-size:18px; color:#b91c1c; margin-bottom:10px;">{{ title | default('Hey there!') }}</h2>
-  <p style="font-size:14px; color:#991b1b; line-height:1.6;">
+{% if type == 'greeting' %}
+<!-- Greeting Card -->
+<div style="text-align: center; padding: 32px 20px; background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px;">
+  {% if icon %}
+  <div style="font-size: 48px; margin-bottom: 16px;">{{ icon }}</div>
+  {% endif %}
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0 0 12px 0; letter-spacing: -0.03em;">{{ title | default('Hello!') }}</h2>
+  <p style="font-size: 14px; color: #2A2520; line-height: 1.6; max-width: 400px; margin: 0 auto;">
+    {{ message | default('Wishing you a wonderful day ahead.') }}
+  </p>
+  {% if signature %}
+  <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #CBC3B7;">
+    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600; color: #2A2520;">{{ signature }}</div>
+  </div>
+  {% endif %}
+</div>
+
+{% elif type == 'invitation' %}
+<!-- Invitation -->
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; overflow: hidden;">
+  {% if event_image %}
+  <div style="background-color: #EFE9DC; padding: 4px;">
+    <img src="{{ event_image }}" alt="Event" style="width: 100%; display: block;">
+  </div>
+  {% endif %}
+  <div style="padding: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">You're Invited</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0 0 16px 0; letter-spacing: -0.02em;">{{ title | default('Event Name') }}</h2>
+
+    <div class="card" style="margin-bottom: 16px;">
+      {% if event_date %}
+      <div class="stat-row">
+        <span class="stat-label">Date</span>
+        <span class="stat-value">{{ event_date }}</span>
+      </div>
+      {% endif %}
+      {% if event_time %}
+      <div class="stat-row">
+        <span class="stat-label">Time</span>
+        <span class="stat-value">{{ event_time }}</span>
+      </div>
+      {% endif %}
+      {% if event_location %}
+      <div class="stat-row">
+        <span class="stat-label">Location</span>
+        <span class="stat-value">{{ event_location }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if description %}
+    <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ description }}</p>
+    {% endif %}
+
+    {% if action_url %}
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('RSVP') }}
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% elif type == 'note' %}
+<!-- Casual Note -->
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
+  {% if from_name %}
+  <div style="margin-bottom: 16px;">
+    <div class="kv-label">From</div>
+    <div class="kv-value font-semibold">{{ from_name }}</div>
+  </div>
+  {% endif %}
+
+  <div style="font-size: 14px; color: #2A2520; line-height: 1.6; white-space: pre-line;">{{ message }}</div>
+
+  {% if action_url %}
+  <div style="margin-top: 16px;">
+    <a href="{{ action_url }}" class="btn btn-ghost">
+      {{ action_text | default('Reply') }}
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+{% elif type == 'congrats' %}
+<!-- Congratulations -->
+<div style="text-align: center; padding: 32px 20px; background: #3A6B3A; border-radius: 4px;">
+  <div style="font-size: 48px; margin-bottom: 16px;">&#127881;</div>
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #EFE9DC; margin: 0 0 12px 0; letter-spacing: -0.03em;">Congratulations!</h2>
+  <p style="font-size: 14px; color: #EFE9DC; line-height: 1.6; max-width: 400px; margin: 0 auto; opacity: 0.9;">
+    {{ message | default('Well done on this amazing achievement.') }}
+  </p>
+  {% if achievement %}
+  <div style="margin-top: 20px; padding: 12px 20px; background: rgba(255,255,255,0.15); border-radius: 4px; display: inline-block;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #EFE9DC; text-transform: uppercase; letter-spacing: 0.1em;">Achievement</div>
+    <div style="font-size: 16px; font-weight: 700; color: #EFE9DC; margin-top: 4px;">{{ achievement }}</div>
+  </div>
+  {% endif %}
+</div>
+
+{% elif type == 'reminder' %}
+<!-- Reminder -->
+<div style="background: #8B6B1A; border-radius: 4px; padding: 4px;">
+  <div style="background: #EEE8DB; border-radius: 0 0 4px 4px; padding: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8B6B1A; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Reminder</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin: 0 0 12px 0; letter-spacing: -0.02em;">{{ title | default('Upcoming Event') }}</h2>
+    <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ message }}</p>
+
+    {% if event_date or event_time %}
+    <div class="card" style="margin-top: 16px; margin-bottom: 0;">
+      {% if event_date %}
+      <div class="stat-row">
+        <span class="stat-label">When</span>
+        <span class="stat-value">{{ event_date }}{% if event_time %} at {{ event_time }}{% endif %}</span>
+      </div>
+      {% endif %}
+      {% if event_location %}
+      <div class="stat-row">
+        <span class="stat-label">Where</span>
+        <span class="stat-value">{{ event_location }}</span>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if action_url %}
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('View Details') }}
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% elif type == 'recommendation' %}
+<!-- Recommendation -->
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
+  <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Recommended for you</p>
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin: 0 0 12px 0; letter-spacing: -0.02em;">{{ title | default('Check this out') }}</h2>
+
+  {% if media_image %}
+  <div style="margin-bottom: 16px;">
+    <img src="{{ media_image }}" alt="{{ title }}" style="width: 100%; border-radius: 4px;">
+  </div>
+  {% endif %}
+
+  <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ message }}</p>
+
+  {% if rating %}
+  <div style="margin-top: 12px;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9C3D3B;">{{ rating }}</span>
+  </div>
+  {% endif %}
+
+  {% if action_url %}
+  <div style="margin-top: 16px;">
+    <a href="{{ action_url }}" class="btn btn-outline">
+      {{ action_text | default('Learn More') }}
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+{% else %}
+<!-- Default: Personal Message -->
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin-bottom: 10px; letter-spacing: -0.02em;">{{ title | default('Hey there!') }}</h2>
+  <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">
     {{ message | default('Just a friendly note from Mema. Feel free to reply or ignore.') }}
   </p>
   {% if action_url %}
-    <div style="margin-top:12px; text-align:center;">
-      <a href="{{ action_url }}" style="display:inline-block; background:#dc2626; color:#fff; padding:6px 12px; border-radius:4px; text-decoration:none; font-size:13px;">
+    <div style="margin-top: 12px; text-align: center;">
+      <a href="{{ action_url }}" style="display: inline-block; background: #9C3D3B; color: #EFE9DC; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;">
         {{ action_text | default('Check It Out') }}
       </a>
     </div>
   {% endif %}
 </div>
+{% endif %}
+
+{% if ps %}
+<div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #CBC3B7;">
+  <p style="font-size: 13px; color: #6F675D; font-style: italic; margin: 0;">P.S. {{ ps }}</p>
+</div>
+{% endif %}
 {% endblock %}

@@ -1,79 +1,92 @@
 {% extends "base.html" %}
-{% block artifact_class %}NEWSLETTER{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('NEWSLETTER') }}{% endblock %}
+{% block header_class %}header-minimal{% endblock %}
+{% block brand_sub_color %}#2A2520{% endblock %}
 
 {% block content %}
-{% if header_image %}
-<div style="text-align: center; margin-bottom: 24px;">
-    <img src="{{ header_image }}" alt="{{ header_alt | default('Newsletter Header') }}" style="max-width: 100%; height: auto; border-radius: 6px;" />
+{% if type == 'announcement' %}
+<!-- Announcement -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Announcement</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('New Announcement') }}</h2>
+    {% if date %}
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">{{ date }}</p>
+    {% endif %}
+</div>
+
+{% if hero_image %}
+<div style="margin-bottom: 24px;">
+    <img src="{{ hero_image }}" alt="{{ title }}" style="width: 100%; border-radius: 4px;">
 </div>
 {% endif %}
 
-<div class="card">
-    <h2 style="font-size: 22px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; text-align: center;">
-        {{ newsletter_title | default('Newsletter') }}
-    </h2>
-    {% if newsletter_subtitle %}
-    <p style="color: #64748b; margin: 0 0 24px 0; text-align: center; font-size: 14px;">
-        {{ newsletter_subtitle }}
-    </p>
-    {% endif %}
-    
-    {% if intro %}
-    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6; text-align: center;">
-        {{ intro }}
-    </p>
+<div style="font-size: 14px; color: #2A2520; line-height: 1.6;">
+    {{ content | safe }}
+</div>
+
+{% if highlights %}
+<div class="card" style="margin-top: 24px;">
+    <div class="card-title">Key Highlights</div>
+    {% for item in highlights %}
+    <div class="list-item-check">{{ item }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary btn-lg">
+        {{ action_text | default('Learn More') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'digest' %}
+<!-- Digest / Weekly Update -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">{{ period | default('Weekly Digest') }}</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('Your Weekly Update') }}</h2>
+    {% if date_range %}
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">{{ date_range }}</p>
     {% endif %}
 </div>
 
-{% if articles %}
-{% for article in articles %}
+{% if summary %}
+<div class="card-elevated">
+    <div class="card-title-accent">Summary</div>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ summary }}</p>
+</div>
+{% endif %}
+
+{% if sections %}
+{% for section in sections %}
 <div class="card">
-    {% if article.title %}
-    <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 8px 0;">
-        {{ article.title }}
-    </h3>
+    <div class="card-title">{{ section.title }}</div>
+    <div style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ section.content }}</div>
+    {% if section.items %}
+    <ul class="list" style="margin-top: 12px;">
+        {% for item in section.items %}
+        <li class="list-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
-    
-    {% if article.image %}
-    <div style="margin: 16px 0;">
-        <img src="{{ article.image }}" alt="{{ article.image_alt | default(article.title) }}" style="max-width: 100%; height: auto; border-radius: 4px;" />
-    </div>
-    {% endif %}
-    
-    {% if article.excerpt %}
-    <p style="color: #475569; margin: 0 0 12px 0; line-height: 1.6;">
-        {{ article.excerpt }}
-    </p>
-    {% endif %}
-    
-    {% if article.read_more_url %}
-    <div style="margin-top: 16px;">
-        <a href="{{ article.read_more_url }}" class="btn btn-outline btn-sm">
-            {{ article.read_more_text | default('Read More') }} →
-        </a>
+    {% if section.link %}
+    <div style="margin-top: 12px;">
+        <a href="{{ section.link }}" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9C3D3B; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">{{ section.link_text | default('Read more') }}</a>
     </div>
     {% endif %}
 </div>
 {% endfor %}
 {% endif %}
 
-{% if featured_items %}
-<div class="card">
-    <div class="card-title">Featured</div>
+{% if stats %}
+<div style="margin-bottom: 20px;">
     <div class="row">
-        {% for item in featured_items %}
-        <div class="col col-6">
-            <div style="padding: 12px; background-color: #f8fafc; border-radius: 4px; margin-bottom: 12px;">
-                {% if item.title %}
-                <strong style="color: #1e293b; font-size: 14px;">{{ item.title }}</strong>
-                {% endif %}
-                {% if item.description %}
-                <p style="color: #64748b; margin: 4px 0 0 0; font-size: 12px;">{{ item.description }}</p>
-                {% endif %}
-                {% if item.url %}
-                <a href="{{ item.url }}" style="color: #2563eb; font-size: 12px; text-decoration: none;">Learn more →</a>
-                {% endif %}
+        {% for stat in stats %}
+        <div class="col col-{{ 12 / stats | length }}">
+            <div class="stat-block" style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px;">
+                <div class="stat-number">{{ stat.value }}</div>
+                <div class="stat-description">{{ stat.label }}</div>
             </div>
         </div>
         {% endfor %}
@@ -81,20 +94,161 @@
 </div>
 {% endif %}
 
-{% if quote %}
-<div class="blockquote">
-    {{ quote.text }}
-    {% if quote.author %}
-    <div class="blockquote-footer">— {{ quote.author }}</div>
+{% elif type == 'changelog' %}
+<!-- Changelog -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Changelog</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('What\'s New') }}</h2>
+    {% if version %}
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">Version {{ version }}</p>
     {% endif %}
+</div>
+
+{% if changes %}
+{% for change in changes %}
+<div class="card">
+    <div style="margin-bottom: 8px;">
+        <span class="badge badge-{{ change.type | default('info') }}">{{ change.type | default('update') | upper }}</span>
+    </div>
+    <div class="card-title">{{ change.title }}</div>
+    <div style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ change.description }}</div>
+    {% if change.items %}
+    <ul class="list" style="margin-top: 12px;">
+        {% for item in change.items %}
+        <li class="list-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('View Full Changelog') }}
+    </a>
 </div>
 {% endif %}
 
-{% if cta_url %}
-<div style="text-align: center; margin-top: 32px;">
-    <a href="{{ cta_url }}" class="btn btn-primary btn-lg">
-        {{ cta_text | default('View All Updates') }}
-    </a>
+{% elif type == 'curated' %}
+<!-- Curated Content -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Curated for you</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('Interesting Finds') }}</h2>
+</div>
+
+{% if items %}
+{% for item in items %}
+<div class="card" style="{% if not loop.last %}margin-bottom: 16px{% endif %}">
+    {% if item.image %}
+    <div style="margin-bottom: 12px;">
+        <img src="{{ item.image }}" alt="{{ item.title }}" style="width: 100%; border-radius: 4px;">
+    </div>
+    {% endif %}
+    <div class="card-title">{{ item.category | default('Article') }}</div>
+    <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: #2A2520; margin: 0 0 8px 0; letter-spacing: -0.01em;">{{ item.title }}</h3>
+    <p style="font-size: 13px; color: #6F675D; margin: 0 0 12px 0; line-height: 1.5;">{{ item.description }}</p>
+    {% if item.url %}
+    <a href="{{ item.url }}" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9C3D3B; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">Read more</a>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% elif type == 'report' %}
+<!-- Report Summary -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Report</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('Monthly Report') }}</h2>
+    {% if period %}
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">{{ period }}</p>
+    {% endif %}
+</div>
+
+{% if metrics %}
+<div style="margin-bottom: 24px;">
+    <div class="row">
+        {% for metric in metrics %}
+        <div class="col col-{{ 12 / metrics | length }}">
+            <div class="stat-block" style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px;">
+                <div class="stat-number" style="{% if metric.trend == 'up' %}color: #3A6B3A{% elif metric.trend == 'down' %}color: #9C3D3B{% endif %}">{{ metric.value }}</div>
+                <div class="stat-description">{{ metric.label }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if sections %}
+{% for section in sections %}
+<div class="card">
+    <div class="card-title">{{ section.title }}</div>
+    <div style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ section.content }}</div>
+    {% if section.table %}
+    <table class="table table-striped" style="margin-top: 12px;">
+        <thead>
+            <tr>
+                {% for header in section.table.headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in section.table.rows %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if next_report %}
+<div style="margin-top: 20px; text-align: center;">
+    <span class="badge badge-light">Next report: {{ next_report }}</span>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Default: Newsletter -->
+<div style="margin-bottom: 24px;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('Newsletter') }}</h2>
+    {% if date %}
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">{{ date }}</p>
+    {% endif %}
+</div>
+
+{% if content %}
+<div style="font-size: 14px; color: #2A2520; line-height: 1.6;">
+    {{ content | safe }}
+</div>
+{% endif %}
+
+{% if items %}
+{% for item in items %}
+<div class="card">
+    <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: #2A2520; margin: 0 0 8px 0;">{{ item.title }}</h3>
+    <p style="font-size: 14px; color: #6F675D; margin: 0; line-height: 1.5;">{{ item.description }}</p>
+    {% if item.url %}
+    <div style="margin-top: 12px;">
+        <a href="{{ item.url }}" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9C3D3B; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">Read more</a>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if unsubscribe_url %}
+<div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #CBC3B7; text-align: center;">
+    <a href="{{ unsubscribe_url }}" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #A49C92; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;">Unsubscribe</a>
 </div>
 {% endif %}
 {% endblock %}

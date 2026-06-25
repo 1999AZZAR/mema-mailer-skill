@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% block artifact_class %}ANALYTICS REPORT{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('ANALYTICS REPORT') }}{% endblock %}
 
 {% block content %}
 {% if report_title %}
 <div style="margin-bottom: 24px;">
-    <h2 style="font-size: 20px; font-weight: 600; margin: 0 0 4px 0; color: #1e293b;">{{ report_title }}</h2>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; margin: 0 0 4px 0; color: #2A2520; letter-spacing: -0.02em;">{{ report_title }}</h2>
     {% if report_subtitle %}
-    <p style="font-size: 13px; color: #64748b; margin: 0;">{{ report_subtitle }}</p>
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0; letter-spacing: 0.1em; text-transform: uppercase;">{{ report_subtitle }}</p>
     {% endif %}
     {% if report_date %}
-    <p style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 0;">Generated: {{ report_date }}</p>
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #A49C92; margin: 8px 0 0 0; letter-spacing: 0.05em;">Generated: {{ report_date }}</p>
     {% endif %}
 </div>
 {% endif %}
@@ -18,7 +17,7 @@
 {% if summary %}
 <div class="card">
     <div class="card-title">Summary</div>
-    <p style="color: #475569; margin: 0; line-height: 1.6;">{{ summary }}</p>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ summary }}</p>
 </div>
 {% endif %}
 
@@ -66,8 +65,8 @@
     {% for item in progress_data %}
     <div style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <span style="font-size: 13px; color: #64748b;">{{ item.label }}</span>
-            <span style="font-size: 13px; font-weight: 600; color: #0f172a;">{{ item.value }}%</span>
+            <span style="font-size: 13px; color: #6F675D;">{{ item.label }}</span>
+            <span style="font-size: 13px; font-weight: 600; color: #2A2520; font-family: 'JetBrains Mono', monospace;">{{ item.value }}%</span>
         </div>
         <div class="progress">
             <div class="progress-bar{% if item.value >= 80 %} progress-bar-success{% elif item.value >= 50 %} progress-bar-warning{% else %} progress-bar-danger{% endif %}" style="width: {{ item.value }}%;"></div>

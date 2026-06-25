@@ -1,17 +1,41 @@
 {% extends "base.html" %}
-{% block artifact_class %}NODE DIAGNOSTIC{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('NODE DIAGNOSTIC') }}{% endblock %}
 
 {% block content %}
 <!-- System Status -->
 <div style="margin-bottom: 24px;">
-    <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: #1e293b;">System Health Dashboard</h2>
-    <p style="font-size: 13px; color: #64748b; margin: 0;">Generated at {{ now }}</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; margin: 0 0 4px 0; color: #2A2520; letter-spacing: -0.02em;">{{ title | default('System Health Dashboard') }}</h2>
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0; letter-spacing: 0.1em; text-transform: uppercase;">Generated at {{ now }}</p>
 </div>
 
+{% if overall_status %}
+<!-- Overall Status -->
+<div style="margin-bottom: 20px; padding: 16px 20px; background-color: {% if overall_status == 'healthy' %}#3A6B3A{% elif overall_status == 'degraded' %}#8B6B1A{% else %}#9C3D3B{% endif %}; border-radius: 4px; text-align: center;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #EFE9DC; text-transform: uppercase; letter-spacing: 0.1em;">System Status</div>
+    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #EFE9DC; margin-top: 4px;">{{ overall_status | upper }}</div>
+</div>
+{% endif %}
+
+{% if summary %}
+<!-- Summary Stats -->
+<div style="margin-bottom: 20px;">
+    <div class="row">
+        {% for stat in summary %}
+        <div class="col col-{{ 12 / summary | length }}">
+            <div class="stat-block" style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px;">
+                <div class="stat-number">{{ stat.value }}</div>
+                <div class="stat-description">{{ stat.label }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if oci %}
 <!-- OCI Section -->
-<div class="card" style="border-left: 4px solid #3b82f6;">
-    <div class="card-title" style="color: #3b82f6;">🖥️ OCI Main Server</div>
+<div class="card" style="border-left: 4px solid #9C3D3B;">
+    <div class="card-title" style="color: #9C3D3B;">{{ oci.title | default('OCI Main Server') }}</div>
     <div class="stat-row">
         <span class="stat-label">Uptime</span>
         <span class="stat-value">{{ oci.uptime }}</span>
@@ -28,15 +52,25 @@
         <span class="stat-label">Storage</span>
         <span class="stat-value">{{ oci.disk }}</span>
     </div>
+    {% if oci.docker %}
     <div class="stat-row">
         <span class="stat-label">Docker</span>
         <span class="stat-value">{{ oci.docker }}</span>
     </div>
+    {% endif %}
+    {% if oci.network %}
+    <div class="stat-row">
+        <span class="stat-label">Network</span>
+        <span class="stat-value">{{ oci.network }}</span>
+    </div>
+    {% endif %}
 </div>
+{% endif %}
 
+{% if pihole %}
 <!-- Pi-hole Section -->
-<div class="card" style="border-left: 4px solid #22c55e;">
-    <div class="card-title" style="color: #22c55e;">🛡️ Pi-hole Security</div>
+<div class="card" style="border-left: 4px solid #3A6B3A;">
+    <div class="card-title" style="color: #3A6B3A;">{{ pihole.title | default('Pi-hole Security') }}</div>
     <div class="stat-row">
         <span class="stat-label">Total Queries</span>
         <span class="stat-value">{{ pihole.total_queries }}</span>
@@ -49,14 +83,22 @@
         <span class="stat-label">Top Client</span>
         <span class="stat-value">{{ pihole.top_clients }}</span>
     </div>
+    {% if pihole.domains %}
+    <div class="stat-row">
+        <span class="stat-label">Domains</span>
+        <span class="stat-value">{{ pihole.domains }}</span>
+    </div>
+    {% endif %}
 </div>
+{% endif %}
 
+{% if lappy %}
 <!-- Lappy Section -->
-<div class="card" style="border-left: 4px solid #a855f7;">
-    <div class="card-title" style="color: #a855f7;">💻 Lappy Node</div>
+<div class="card" style="border-left: 4px solid #6F675D;">
+    <div class="card-title" style="color: #6F675D;">{{ lappy.title | default('Lappy Node') }}</div>
     <div class="stat-row">
         <span class="stat-label">Status</span>
-        <span class="stat-value" style="{{ 'color: #22c55e;' if lappy.status == 'Connected' else 'color: #ef4444;' }}">{{ lappy.status }}</span>
+        <span class="stat-value" style="{{ 'color: #3A6B3A;' if lappy.status == 'Connected' else 'color: #9C3D3B;' }}">{{ lappy.status }}</span>
     </div>
     {% if lappy.status == 'Connected' %}
     <div class="stat-row">
@@ -77,4 +119,51 @@
     </div>
     {% endif %}
 </div>
+{% endif %}
+
+{% if services %}
+<!-- Services Section -->
+<div class="card">
+    <div class="card-title">Services</div>
+    {% for service in services %}
+    <div class="stat-row">
+        <span class="stat-label">{{ service.name }}</span>
+        <span class="stat-value" style="color: {% if service.status == 'running' %}#3A6B3A{% elif service.status == 'stopped' %}#9C3D3B{% else %}#8B6B1A{% endif %};">{{ service.status | upper }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if custom_sections %}
+{% for section in custom_sections %}
+<div class="card" style="border-left: 4px solid {{ section.color | default('#6F675D') }};">
+    <div class="card-title" style="color: {{ section.color | default('#6F675D') }};">{{ section.title }}</div>
+    {% for key, value in section.data.items() %}
+    <div class="stat-row">
+        <span class="stat-label">{{ key }}</span>
+        <span class="stat-value">{{ value }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if alerts %}
+<!-- Alerts Section -->
+<div style="margin-top: 20px;">
+    <div class="card-title">Active Alerts</div>
+    {% for alert in alerts %}
+    <div class="alert alert-{{ alert.severity | default('warning') }}" style="margin-bottom: 12px;">
+        <strong style="font-size: 14px;">{{ alert.title }}</strong>
+        <p style="margin: 8px 0 0 0; font-size: 13px;">{{ alert.message }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if next_check %}
+<div style="margin-top: 20px; text-align: center;">
+    <span class="badge badge-light">Next check: {{ next_check }}</span>
+</div>
+{% endif %}
 {% endblock %}

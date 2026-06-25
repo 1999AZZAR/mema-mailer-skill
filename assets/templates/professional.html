@@ -1,27 +1,26 @@
 {% extends "base.html" %}
-{% block artifact_class %}CORRESPONDENCE{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('CORRESPONDENCE') }}{% endblock %}
 
 {% block content %}
 <div class="card">
-    <h2 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 16px 0;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin: 0 0 16px 0; letter-spacing: -0.02em;">
         {{ title | default('Automated Notification') }}
     </h2>
-    
-    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">
+
+    <p style="color: #2A2520; margin: 0 0 16px 0; line-height: 1.6;">
         Dear {{ name | default('Azzar') }},
     </p>
-    
-    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">
+
+    <p style="color: #2A2520; margin: 0 0 16px 0; line-height: 1.6;">
         {{ message }}
     </p>
-    
+
     {% if items %}
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin: 24px 0; border: 1px solid #f1f5f9; border-radius: 6px; border-collapse: collapse;">
+    <table class="table" style="margin: 24px 0;">
         {% for label, value in items.items() %}
-        <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 12px; font-weight: 600; color: #64748b; width: 40%; font-size: 13px;">{{ label }}</td>
-            <td style="padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #0f172a; font-size: 13px;">{{ value }}</td>
+        <tr>
+            <td style="font-weight: 600; color: #6F675D; width: 40%;">{{ label }}</td>
+            <td style="font-family: 'JetBrains Mono', monospace; color: #2A2520;">{{ value }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -29,7 +28,7 @@
 
     {% if action_url %}
     <div style="margin-top: 28px; margin-bottom: 8px; text-align: center;">
-        <a href="{{ action_url }}" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 13px;">
+        <a href="{{ action_url }}" style="display: inline-block; background-color: #9C3D3B; color: #EFE9DC; padding: 12px 24px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 13px; letter-spacing: 0.02em;">
             {{ action_text | default('View Details') }}
         </a>
     </div>

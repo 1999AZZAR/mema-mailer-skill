@@ -1,41 +1,39 @@
 {% extends "base.html" %}
-{% block artifact_class %}CRITICAL ALERT{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('ALERT') }}{% endblock %}
 
 {% block content %}
 {% if severity == 'critical' %}
 <div class="alert alert-danger">
-    <strong style="font-size: 16px;">{{ alert_title | default('Critical Alert') }}</strong>
-    <p style="margin: 12px 0 0 0; font-size: 14px;">{{ alert_message }}</p>
+    <strong style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">{{ alert_title | default('Critical Alert') }}</strong>
+    <p style="margin: 12px 0 0 0; font-size: 14px; line-height: 1.6;">{{ alert_message }}</p>
 </div>
 {% elif severity == 'warning' %}
 <div class="alert alert-warning">
-    <strong style="font-size: 16px;">{{ alert_title | default('Warning') }}</strong>
-    <p style="margin: 12px 0 0 0; font-size: 14px;">{{ alert_message }}</p>
+    <strong style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">{{ alert_title | default('Warning') }}</strong>
+    <p style="margin: 12px 0 0 0; font-size: 14px; line-height: 1.6;">{{ alert_message }}</p>
 </div>
-{% elif severity == 'info' %}
-<div class="alert alert-info">
-    <strong style="font-size: 16px;">{{ alert_title | default('Information') }}</strong>
-    <p style="margin: 12px 0 0 0; font-size: 14px;">{{ alert_message }}</p>
+{% elif severity == 'success' %}
+<div class="alert alert-success">
+    <strong style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">{{ alert_title | default('Success') }}</strong>
+    <p style="margin: 12px 0 0 0; font-size: 14px; line-height: 1.6;">{{ alert_message }}</p>
 </div>
 {% else %}
 <div class="alert alert-info">
-    <strong style="font-size: 16px;">{{ alert_title | default('Alert') }}</strong>
-    <p style="margin: 12px 0 0 0; font-size: 14px;">{{ alert_message }}</p>
+    <strong style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">{{ alert_title | default('Information') }}</strong>
+    <p style="margin: 12px 0 0 0; font-size: 14px; line-height: 1.6;">{{ alert_message }}</p>
 </div>
 {% endif %}
 
+{% if title %}
 <div class="card">
-    {% if title %}
-    <h2 style="font-size: 18px; font-weight: 600; color: #1e293b; margin: 0 0 16px 0;">{{ title }}</h2>
-    {% endif %}
-    
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: #2A2520; margin: 0 0 16px 0; letter-spacing: -0.02em;">{{ title }}</h2>
+
     {% if description %}
-    <p style="color: #475569; margin: 0 0 16px 0; line-height: 1.6;">
+    <p style="color: #2A2520; margin: 0 0 16px 0; line-height: 1.6;">
         {{ description }}
     </p>
     {% endif %}
-    
+
     {% if affected_items %}
     <div style="margin: 20px 0;">
         <div class="card-title">Affected Items</div>
@@ -46,9 +44,9 @@
         {% endfor %}
     </div>
     {% endif %}
-    
+
     {% if details %}
-    <div class="card" style="background-color: #f8fafc; margin-top: 16px;">
+    <div class="card" style="background-color: #EFE9DC; margin-top: 16px; border-color: #CBC3B7;">
         <div class="card-title">Details</div>
         {% for key, value in details.items() %}
         <div class="stat-row">
@@ -58,7 +56,32 @@
         {% endfor %}
     </div>
     {% endif %}
+
+    {% if metrics %}
+    <div style="margin-top: 20px;">
+        <div class="card-title">Metrics</div>
+        <table class="table table-striped" style="margin: 0;">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metric in metrics %}
+                <tr>
+                    <td>{{ metric.name }}</td>
+                    <td style="font-family: 'JetBrains Mono', monospace;">{{ metric.value }}</td>
+                    <td><span class="badge badge-{{ metric.status | default('info') }}">{{ metric.status_label | default('N/A') }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 </div>
+{% endif %}
 
 {% if action_url %}
 <div style="text-align: center; margin-top: 24px;">

@@ -1,19 +1,216 @@
 {% extends "base.html" %}
-{% block artifact_class %}BUSINESS{% endblock %}
-{% block theme %}business{% endblock %}
+{% block artifact_class %}{{ artifact_class | default('BUSINESS') }}{% endblock %}
 
 {% block content %}
-<div style="background:#f0f9ff; border:1px solid #60a5fa; border-radius:6px; padding:24px;">
-  <h2 style="font-size:20px; color:#0d47a1; margin-bottom:12px;">{{ title | default('Business Update') }}</h2>
-  <p style="font-size:14px; color:#1e3a8a; line-height:1.5;">
-    {{ message | default('Your business‑related notification goes here.') }}
+{% if type == 'invoice' %}
+<!-- Invoice Header -->
+<div style="margin-bottom: 24px;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">Invoice</h2>
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 8px 0 0; letter-spacing: 0.1em; text-transform: uppercase;">{{ invoice_number | default('INV-0001') }}</p>
+</div>
+
+<!-- Invoice Details -->
+<div class="card">
+    <div class="row">
+        <div class="col col-6">
+            <div class="kv-row">
+                <div class="kv-label">Bill To</div>
+                <div class="kv-value">{{ client_name | default('Client Name') }}</div>
+                {% if client_email %}
+                <div class="kv-value text-muted text-sm">{{ client_email }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col col-6">
+            <div class="kv-row">
+                <div class="kv-label">Issue Date</div>
+                <div class="kv-value">{{ issue_date | default(now) }}</div>
+            </div>
+            <div class="kv-row">
+                <div class="kv-label">Due Date</div>
+                <div class="kv-value">{{ due_date | default('Net 30') }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Line Items -->
+<div class="card">
+    <div class="card-title">Line Items</div>
+    <table class="table" style="margin: 0;">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th style="text-align: right;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items | default([]) %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-total">
+                <td>Total</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">{{ total | default('$0.00') }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+{% if payment_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ payment_url }}" class="btn btn-primary btn-lg">
+        {{ payment_text | default('Pay Now') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'proposal' %}
+<!-- Proposal Header -->
+<div style="margin-bottom: 24px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Proposal</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('Project Proposal') }}</h2>
+</div>
+
+{% if summary %}
+<div class="card-elevated">
+    <div class="card-title-accent">Executive Summary</div>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ summary }}</p>
+</div>
+{% endif %}
+
+{% if sections %}
+{% for section in sections %}
+<div class="card">
+    <div class="card-title">{{ section.title }}</div>
+    <div style="color: #2A2520; line-height: 1.6;">{{ section.content }}</div>
+    {% if section.items %}
+    <ul class="list" style="margin-top: 12px;">
+        {% for item in section.items %}
+        <li class="list-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if pricing %}
+<div class="card">
+    <div class="card-title">Investment</div>
+    {% for plan in pricing %}
+    <div class="pricing-card {% if plan.featured %}pricing-card-featured{% endif %}" style="margin-bottom: 12px;">
+        <div class="pricing-name">{{ plan.name }}</div>
+        <div class="pricing-price">{{ plan.price }}{% if plan.period %}<span class="pricing-period"> / {{ plan.period }}</span>{% endif %}</div>
+        {% if plan.features %}
+        <ul class="list" style="margin-top: 12px;">
+            {% for feature in plan.features %}
+            <li class="list-item-check">{{ feature }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary btn-lg">
+        {{ action_text | default('Accept Proposal') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'receipt' %}
+<!-- Receipt Header -->
+<div style="text-align: center; margin-bottom: 24px; padding: 20px; background-color: #3A6B3A; border-radius: 4px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #EFE9DC; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Payment Confirmed</div>
+    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 700; color: #EFE9DC; letter-spacing: -0.03em;">{{ total | default('$0.00') }}</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Transaction Details</div>
+    <div class="kv-row">
+        <div class="kv-label">Reference</div>
+        <div class="kv-value font-mono">{{ reference | default('REF-0001') }}</div>
+    </div>
+    <div class="kv-row">
+        <div class="kv-label">Date</div>
+        <div class="kv-value">{{ date | default(now) }}</div>
+    </div>
+    <div class="kv-row">
+        <div class="kv-label">Payment Method</div>
+        <div class="kv-value">{{ payment_method | default('Credit Card') }}</div>
+    </div>
+</div>
+
+{% if items %}
+<div class="card">
+    <div class="card-title">Items Purchased</div>
+    {% for item in items %}
+    <div class="stat-row">
+        <span class="stat-label">{{ item.name }}</span>
+        <span class="stat-value">{{ item.amount }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% else %}
+<!-- Default: Business Update -->
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
+  <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin-bottom: 12px; letter-spacing: -0.02em;">{{ title | default('Business Update') }}</h2>
+  <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">
+    {{ message | default('Your business-related notification goes here.') }}
   </p>
+
+  {% if highlights %}
+  <div style="margin-top: 16px;">
+    <div class="card-title">Key Highlights</div>
+    {% for item in highlights %}
+    <div class="list-item-check">{{ item }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if metrics %}
+  <div style="margin-top: 20px;">
+    <div class="card-title">Metrics</div>
+    <div class="row">
+      {% for metric in metrics %}
+      <div class="col col-{{ 12 / metrics | length }}">
+        <div class="stat-block">
+          <div class="stat-number">{{ metric.value }}</div>
+          <div class="stat-description">{{ metric.label }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
   {% if action_url %}
-    <div style="margin-top:16px; text-align:center;">
-      <a href="{{ action_url }}" style="display:inline-block; background:#1e40af; color:#fff; padding:8px 16px; border-radius:4px; text-decoration:none;">
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="{{ action_url }}" style="display: inline-block; background: #9C3D3B; color: #EFE9DC; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 13px; letter-spacing: 0.02em;">
         {{ action_text | default('View Details') }}
       </a>
     </div>
   {% endif %}
 </div>
+{% endif %}
+
+{% if signature %}
+<div class="signature">
+    <div class="signature-name">{{ signature.name | default('Azzar Budiyanto') }}</div>
+    <div class="signature-title">{{ signature.title | default('Founder, MEMA AI') }}</div>
+    {% if signature.email %}
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin-top: 8px;">{{ signature.email }}</div>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}

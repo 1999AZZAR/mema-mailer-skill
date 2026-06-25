@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block artifact_class %}{{ artifact_class | default('INQUIRY') }}{% endblock %}
+
+{% block content %}
+{% if type == 'support' %}
+<!-- Support Request -->
+<div style="margin-bottom: 20px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Support Request</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.02em;">{{ title | default('How can we help?') }}</h2>
+</div>
+
+<div class="card">
+    <div class="kv-row">
+        <div class="kv-label">Ticket ID</div>
+        <div class="kv-value font-mono">{{ ticket_id | default('TKT-0001') }}</div>
+    </div>
+    <div class="kv-row">
+        <div class="kv-label">Priority</div>
+        <div class="kv-value"><span class="badge badge-{{ priority | default('info') }}">{{ priority | default('Medium') | upper }}</span></div>
+    </div>
+    <div class="kv-row">
+        <div class="kv-label">Category</div>
+        <div class="kv-value">{{ category | default('General') }}</div>
+    </div>
+</div>
+
+{% if message %}
+<div class="card-elevated">
+    <div class="card-title-accent">Your Message</div>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ message }}</p>
+</div>
+{% endif %}
+
+{% if steps %}
+<div class="card">
+    <div class="card-title">Troubleshooting Steps</div>
+    {% for step in steps %}
+    <div class="list-item-number">
+        <span class="list-number">{{ loop.index }}</span>
+        <span>{{ step }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if action_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ action_url }}" class="btn btn-primary">
+        {{ action_text | default('View Ticket') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'feedback' %}
+<!-- Feedback Request -->
+<div style="text-align: center; padding: 24px; background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; margin-bottom: 20px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">We value your opinion</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.02em;">{{ title | default('Share your feedback') }}</h2>
+</div>
+
+{% if questions %}
+<div class="card">
+    {% for question in questions %}
+    <div style="margin-bottom: {% if not loop.last %}20px{% else %}0{% endif %}; padding-bottom: {% if not loop.last %}20px{% else %}0{% endif %};{% if not loop.last %} border-bottom: 1px solid #CBC3B7;{% endif %}">
+        <div style="font-size: 14px; font-weight: 600; color: #2A2520; margin-bottom: 8px;">{{ question.text }}</div>
+        {% if question.type == 'rating' %}
+        <div style="margin-top: 8px;">
+            {% for i in range(1, 6) %}
+            <span style="display: inline-block; width: 32px; height: 32px; line-height: 32px; text-align: center; background: #EFE9DC; border: 1px solid #CBC3B7; border-radius: 4px; margin-right: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6F675D;">{{ i }}</span>
+            {% endfor %}
+        </div>
+        {% elif question.type == 'yes_no' %}
+        <div style="margin-top: 8px;">
+            <span style="display: inline-block; padding: 8px 16px; background: #EFE9DC; border: 1px solid #CBC3B7; border-radius: 4px; margin-right: 8px; font-size: 13px; color: #2A2520; cursor: pointer;">Yes</span>
+            <span style="display: inline-block; padding: 8px 16px; background: #EFE9DC; border: 1px solid #CBC3B7; border-radius: 4px; font-size: 13px; color: #2A2520; cursor: pointer;">No</span>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if response_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ response_url }}" class="btn btn-primary">
+        {{ response_text | default('Submit Feedback') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'question' %}
+<!-- Question / Inquiry -->
+<div style="margin-bottom: 20px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Question</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.02em;">{{ title | default('Your question') }}</h2>
+</div>
+
+<div class="card-elevated">
+    <div class="card-title-accent">Inquiry Details</div>
+    {% if from_name %}
+    <div class="kv-row">
+        <div class="kv-label">From</div>
+        <div class="kv-value">{{ from_name }}</div>
+    </div>
+    {% endif %}
+    {% if from_email %}
+    <div class="kv-row">
+        <div class="kv-label">Email</div>
+        <div class="kv-value font-mono">{{ from_email }}</div>
+    </div>
+    {% endif %}
+    {% if subject %}
+    <div class="kv-row">
+        <div class="kv-label">Subject</div>
+        <div class="kv-value">{{ subject }}</div>
+    </div>
+    {% endif %}
+</div>
+
+{% if message %}
+<div class="card">
+    <div class="card-title">Message</div>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ message }}</p>
+</div>
+{% endif %}
+
+{% if context %}
+<div class="card">
+    <div class="card-title">Additional Context</div>
+    {% for key, value in context.items() %}
+    <div class="stat-row">
+        <span class="stat-label">{{ key }}</span>
+        <span class="stat-value">{{ value }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if reply_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ reply_url }}" class="btn btn-primary">
+        {{ reply_text | default('Reply') }}
+    </a>
+</div>
+{% endif %}
+
+{% elif type == 'survey' %}
+<!-- Survey -->
+<div style="margin-bottom: 20px;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Survey</p>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.02em;">{{ title | default('Quick Survey') }}</h2>
+    {% if description %}
+    <p style="font-size: 14px; color: #6F675D; margin: 8px 0 0; line-height: 1.5;">{{ description }}</p>
+    {% endif %}
+</div>
+
+{% if questions %}
+<div class="card">
+    {% for question in questions %}
+    <div style="margin-bottom: {% if not loop.last %}24px{% else %}0{% endif %};">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6F675D; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Question {{ loop.index }} of {{ questions | length }}</div>
+        <div style="font-size: 14px; font-weight: 600; color: #2A2520; margin-bottom: 8px;">{{ question.text }}</div>
+        {% if question.type == 'multiple_choice' %}
+        <div style="margin-top: 8px;">
+            {% for option in question.options %}
+            <div style="padding: 10px 12px; background: #EFE9DC; border: 1px solid #CBC3B7; border-radius: 4px; margin-bottom: 8px; font-size: 13px; color: #2A2520; cursor: pointer;">{{ option }}</div>
+            {% endfor %}
+        </div>
+        {% elif question.type == 'text' %}
+        <div style="margin-top: 8px; padding: 12px; background: #EFE9DC; border: 1px solid #CBC3B7; border-radius: 4px; min-height: 80px;">
+            <div style="font-size: 13px; color: #A49C92;">Type your answer here...</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if submit_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ submit_url }}" class="btn btn-primary">
+        {{ submit_text | default('Submit Survey') }}
+    </a>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Default: General Inquiry -->
+<div style="margin-bottom: 20px;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.02em;">{{ title | default('Inquiry') }}</h2>
+</div>
+
+<div class="card">
+    {% if from_name %}
+    <div class="kv-row">
+        <div class="kv-label">From</div>
+        <div class="kv-value">{{ from_name }}</div>
+    </div>
+    {% endif %}
+    {% if from_email %}
+    <div class="kv-row">
+        <div class="kv-label">Email</div>
+        <div class="kv-value font-mono">{{ from_email }}</div>
+    </div>
+    {% endif %}
+    {% if subject %}
+    <div class="kv-row">
+        <div class="kv-label">Subject</div>
+        <div class="kv-value">{{ subject }}</div>
+    </div>
+    {% endif %}
+</div>
+
+{% if message %}
+<div class="card-elevated">
+    <div class="card-title-accent">Message</div>
+    <p style="color: #2A2520; margin: 0; line-height: 1.6;">{{ message }}</p>
+</div>
+{% endif %}
+
+{% if reply_url %}
+<div style="text-align: center; margin-top: 24px;">
+    <a href="{{ reply_url }}" class="btn btn-primary">
+        {{ reply_text | default('Reply') }}
+    </a>
+</div>
+{% endif %}
+{% endif %}
+
+{% if timestamp %}
+<div style="text-align: center; margin-top: 24px;">
+    <span class="badge badge-light">{{ timestamp }}</span>
+</div>
+{% endif %}
+{% endblock %}

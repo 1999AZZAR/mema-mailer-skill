@@ -1,18 +1,17 @@
 {% extends "base.html" %}
-{% block artifact_class %}ONBOARDING{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('ONBOARDING') }}{% endblock %}
 
 {% block content %}
 <div class="card" style="text-align: center; padding: 32px;">
-    <h2 style="font-size: 24px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0 0 8px 0; letter-spacing: -0.03em;">
         Welcome, {{ name }}!
     </h2>
-    <p style="color: #64748b; margin: 0 0 24px 0; font-size: 14px;">
-        {{ subtitle | default('We\'re excited to have you on board.') }}
+    <p style="color: #6F675D; margin: 0 0 24px 0; font-size: 14px;">
+        {{ subtitle | default('We are excited to have you on board.') }}
     </p>
-    
+
     {% if welcome_message %}
-    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6;">
+    <p style="color: #2A2520; margin: 0 0 24px 0; line-height: 1.6;">
         {{ welcome_message }}
     </p>
     {% endif %}
@@ -23,8 +22,8 @@
     <div class="card-title">Getting Started</div>
     {% for feature in features %}
     <div class="list-item-icon" style="margin-bottom: 12px;">
-        <strong style="color: #1e293b;">{{ feature.title }}</strong>
-        <p style="color: #64748b; margin: 4px 0 0 0; font-size: 13px;">{{ feature.description }}</p>
+        <strong style="color: #2A2520;">{{ feature.title }}</strong>
+        <p style="color: #6F675D; margin: 4px 0 0 0; font-size: 13px;">{{ feature.description }}</p>
     </div>
     {% endfor %}
 </div>

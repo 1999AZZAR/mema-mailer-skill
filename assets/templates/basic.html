@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% block artifact_class %}BASIC{% endblock %}
-{% block theme %}basic{% endblock %}
+{% block artifact_class %}{{ artifact_class | default('BASIC') }}{% endblock %}
 
 {% block content %}
-<div style="background:#fafafa; border:1px solid #e5e7eb; border-radius:4px; padding:16px;">
-  <h3 style="font-size:16px; color:#374151; margin-bottom:8px;">{{ title | default('Simple Message') }}</h3>
-  <p style="font-size:14px; color:#4b5563; line-height:1.4;">
-    {{ message | default('This is a minimal email template – no frills, just the info.') }}
+<div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 20px;">
+  <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: #2A2520; margin-bottom: 8px; letter-spacing: -0.01em;">{{ title | default('Simple Message') }}</h3>
+  <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">
+    {{ message | default('This is a minimal email template with no frills, just the info.') }}
   </p>
   {% if action_url %}
-    <div style="margin-top:12px; text-align:center;">
-      <a href="{{ action_url }}" style="display:inline-block; background:#6b7280; color:#fff; padding:6px 12px; border-radius:3px; text-decoration:none; font-size:13px;">
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="{{ action_url }}" style="display: inline-block; background: #9C3D3B; color: #EFE9DC; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600;">
         {{ action_text | default('Open') }}
       </a>
     </div>

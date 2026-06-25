@@ -1,26 +1,25 @@
 {% extends "base.html" %}
-{% block artifact_class %}ACTION CONFIRMATION{% endblock %}
-
+{% block artifact_class %}{{ artifact_class | default('ACTION CONFIRMATION') }}{% endblock %}
 
 {% block content %}
 <div class="card" style="text-align: center; padding: 32px;">
     {% if status == 'success' %}
-    <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-    <h2 style="font-size: 22px; font-weight: 700; color: #22c55e; margin: 0 0 8px 0;">
+    <div style="font-size: 48px; margin-bottom: 16px; color: #3A6B3A;">&#10003;</div>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #3A6B3A; margin: 0 0 8px 0; letter-spacing: -0.02em;">
         {{ success_title | default('Success!') }}
     </h2>
     {% elif status == 'error' %}
-    <div style="font-size: 48px; margin-bottom: 16px; color: #ef4444;">✗</div>
-    <h2 style="font-size: 22px; font-weight: 700; color: #ef4444; margin: 0 0 8px 0;">
+    <div style="font-size: 48px; margin-bottom: 16px; color: #9C3D3B;">&#10007;</div>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #9C3D3B; margin: 0 0 8px 0; letter-spacing: -0.02em;">
         {{ error_title | default('Error') }}
     </h2>
     {% else %}
-    <h2 style="font-size: 22px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0;">
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0 0 8px 0; letter-spacing: -0.02em;">
         {{ title | default('Confirmation') }}
     </h2>
     {% endif %}
-    
-    <p style="color: #475569; margin: 0 0 24px 0; line-height: 1.6;">
+
+    <p style="color: #2A2520; margin: 0 0 24px 0; line-height: 1.6;">
         {{ message }}
     </p>
 </div>
@@ -87,8 +86,9 @@
 <div class="card">
     <div class="card-title">Next Steps</div>
     {% for step in next_steps %}
-    <div class="list-item-icon" style="margin-bottom: 12px;">
-        {{ step }}
+    <div class="list-item-number">
+        <span class="list-number">{{ loop.index }}</span>
+        <span>{{ step }}</span>
     </div>
     {% endfor %}
 </div>
