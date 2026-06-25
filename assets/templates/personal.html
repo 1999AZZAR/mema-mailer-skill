@@ -2,7 +2,8 @@
 {% block artifact_class %}{{ artifact_class | default('PERSONAL') }}{% endblock %}
 
 {% block content %}
-{% if type == 'greeting' %}
+{% set variant = variant | default(type | default('default')) %}
+{% if variant == 'greeting' %}
 <!-- Greeting Card -->
 <div style="text-align: center; padding: 32px 20px; background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px;">
   {% if icon %}
@@ -19,7 +20,7 @@
   {% endif %}
 </div>
 
-{% elif type == 'invitation' %}
+{% elif variant == 'invitation' %}
 <!-- Invitation -->
 <div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; overflow: hidden;">
   {% if event_image %}
@@ -66,7 +67,7 @@
   </div>
 </div>
 
-{% elif type == 'note' %}
+{% elif variant == 'note' %}
 <!-- Casual Note -->
 <div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
   {% if from_name %}
@@ -87,7 +88,7 @@
   {% endif %}
 </div>
 
-{% elif type == 'congrats' %}
+{% elif variant == 'congrats' %}
 <!-- Congratulations -->
 <div style="text-align: center; padding: 32px 20px; background: #3A6B3A; border-radius: 4px;">
   <div style="font-size: 48px; margin-bottom: 16px;">&#127881;</div>
@@ -103,7 +104,7 @@
   {% endif %}
 </div>
 
-{% elif type == 'reminder' %}
+{% elif variant == 'reminder' %}
 <!-- Reminder -->
 <div style="background: #8B6B1A; border-radius: 4px; padding: 4px;">
   <div style="background: #EEE8DB; border-radius: 0 0 4px 4px; padding: 24px;">
@@ -138,7 +139,7 @@
   </div>
 </div>
 
-{% elif type == 'recommendation' %}
+{% elif variant == 'recommendation' %}
 <!-- Recommendation -->
 <div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
   <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Recommended for you</p>

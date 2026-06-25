@@ -2,7 +2,8 @@
 {% block artifact_class %}{{ artifact_class | default('BUSINESS') }}{% endblock %}
 
 {% block content %}
-{% if type == 'invoice' %}
+{% set variant = variant | default(type | default('update')) %}
+{% if variant == 'invoice' %}
 <!-- Invoice Header -->
 <div style="margin-bottom: 24px;">
     <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">Invoice</h2>
@@ -67,9 +68,8 @@
         {{ payment_text | default('Pay Now') }}
     </a>
 </div>
-{% endif %}
 
-{% elif type == 'proposal' %}
+{% elif variant == 'proposal' %}
 <!-- Proposal Header -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Proposal</p>
@@ -88,9 +88,9 @@
 <div class="card">
     <div class="card-title">{{ section.title }}</div>
     <div style="color: #2A2520; line-height: 1.6;">{{ section.content }}</div>
-    {% if section.items %}
+    {% if section['items'] %}
     <ul class="list" style="margin-top: 12px;">
-        {% for item in section.items %}
+        {% for item in section['items'] %}
         <li class="list-item">{{ item }}</li>
         {% endfor %}
     </ul>
@@ -126,7 +126,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'receipt' %}
+{% elif variant == 'receipt' %}
 <!-- Receipt Header -->
 <div style="text-align: center; margin-bottom: 24px; padding: 20px; background-color: #3A6B3A; border-radius: 4px;">
     <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #EFE9DC; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Payment Confirmed</div>
@@ -163,6 +163,7 @@
 
 {% else %}
 <!-- Default: Business Update -->
+{% endif %}
 <div style="background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; padding: 24px;">
   <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: #2A2520; margin-bottom: 12px; letter-spacing: -0.02em;">{{ title | default('Business Update') }}</h2>
   <p style="font-size: 14px; color: #2A2520; line-height: 1.6;">

@@ -4,7 +4,9 @@
 {% block brand_sub_color %}#2A2520{% endblock %}
 
 {% block content %}
-{% if type == 'announcement' %}
+{% set variant = variant | default(type | default('default')) %}
+
+{% if variant == 'announcement' %}
 <!-- Announcement -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Announcement</p>
@@ -41,7 +43,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'digest' %}
+{% elif variant == 'digest' %}
 <!-- Digest / Weekly Update -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">{{ period | default('Weekly Digest') }}</p>
@@ -63,9 +65,9 @@
 <div class="card">
     <div class="card-title">{{ section.title }}</div>
     <div style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ section.content }}</div>
-    {% if section.items %}
+    {% if section['items'] %}
     <ul class="list" style="margin-top: 12px;">
-        {% for item in section.items %}
+        {% for item in section['items'] %}
         <li class="list-item">{{ item }}</li>
         {% endfor %}
     </ul>
@@ -94,11 +96,11 @@
 </div>
 {% endif %}
 
-{% elif type == 'changelog' %}
+{% elif variant == 'changelog' %}
 <!-- Changelog -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Changelog</p>
-    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default('What\'s New') }}</h2>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: #2A2520; margin: 0; letter-spacing: -0.03em;">{{ title | default("What's New") }}</h2>
     {% if version %}
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A49C92; margin: 8px 0 0; letter-spacing: 0.05em;">Version {{ version }}</p>
     {% endif %}
@@ -112,9 +114,9 @@
     </div>
     <div class="card-title">{{ change.title }}</div>
     <div style="font-size: 14px; color: #2A2520; line-height: 1.6;">{{ change.description }}</div>
-    {% if change.items %}
+    {% if change['items'] %}
     <ul class="list" style="margin-top: 12px;">
-        {% for item in change.items %}
+        {% for item in change['items'] %}
         <li class="list-item">{{ item }}</li>
         {% endfor %}
     </ul>
@@ -131,7 +133,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'curated' %}
+{% elif variant == 'curated' %}
 <!-- Curated Content -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Curated for you</p>
@@ -156,7 +158,7 @@
 {% endfor %}
 {% endif %}
 
-{% elif type == 'report' %}
+{% elif variant == 'report' %}
 <!-- Report Summary -->
 <div style="margin-bottom: 24px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Report</p>

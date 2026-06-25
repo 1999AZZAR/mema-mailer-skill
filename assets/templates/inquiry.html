@@ -2,7 +2,8 @@
 {% block artifact_class %}{{ artifact_class | default('INQUIRY') }}{% endblock %}
 
 {% block content %}
-{% if type == 'support' %}
+{% set variant = variant | default(type | default('default')) %}
+{% if variant == 'support' %}
 <!-- Support Request -->
 <div style="margin-bottom: 20px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Support Request</p>
@@ -51,7 +52,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'feedback' %}
+{% elif variant == 'feedback' %}
 <!-- Feedback Request -->
 <div style="text-align: center; padding: 24px; background: #EEE8DB; border: 1px solid #CBC3B7; border-radius: 4px; margin-bottom: 20px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">We value your opinion</p>
@@ -88,7 +89,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'question' %}
+{% elif variant == 'question' %}
 <!-- Question / Inquiry -->
 <div style="margin-bottom: 20px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Question</p>
@@ -144,7 +145,7 @@
 </div>
 {% endif %}
 
-{% elif type == 'survey' %}
+{% elif variant == 'survey' %}
 <!-- Survey -->
 <div style="margin-bottom: 20px;">
     <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6F675D; margin: 0 0 8px; letter-spacing: 0.1em; text-transform: uppercase;">Survey</p>
